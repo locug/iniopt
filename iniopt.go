@@ -3,6 +3,8 @@ package iniopt
 import (
 	"fmt"
 	"log"
+	"path/filepath"
+	"strings"
 
 	"github.com/go-ini/ini"
 	"golang.org/x/text/encoding/charmap"
@@ -22,7 +24,8 @@ func CompareINI(original, current string) (b []byte, err error) {
 	if err != nil {
 		return
 	}
-	ic.Name = "COMP"
+
+	ic.Name = filepath.Base(strings.TrimSuffix(original, filepath.Ext(original)))
 
 	for _, section := range ic.Current.Sections() {
 		// Default section is not used by LOC
@@ -60,7 +63,7 @@ func CompareINI(original, current string) (b []byte, err error) {
 
 func (ic *INIComp) makeBytes() (b []byte, err error) {
 	b = ic.writeDifferences()
-	b = append(b, []byte(fmt.Sprintf("@dbHot(%s,SET,%s[*);\r\n", ic.Name, ic.Name))...)
+	b = append(b, []byte(fmt.Sprintf("@dbHot(%s.INI,SET,%s.INI[*);\r\n", ic.Name, ic.Name))...)
 
 	return encode(b)
 }
