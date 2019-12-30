@@ -18,7 +18,7 @@ type INIComp struct {
 func CompareINI(original, current string) (b []byte, err error) {
 
 	// read the INI files and create the compare object
-	ic, err := readFiles("./original.ini", "current.ini")
+	ic, err := readFiles(original, current)
 	if err != nil {
 		return
 	}
