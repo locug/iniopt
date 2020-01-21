@@ -1,7 +1,6 @@
 package iniopt
 
 import (
-	"flag"
 	"fmt"
 	"log"
 	"path/filepath"
@@ -11,10 +10,6 @@ import (
 	"golang.org/x/text/encoding/charmap"
 )
 
-var (
-	makeAll = flag.Bool("a", true, "should make all, not just differences")
-)
-
 type INIComp struct {
 	Name        string
 	Original    *ini.File
@@ -22,7 +17,7 @@ type INIComp struct {
 	Differences map[string]map[string]string // map - section -> keys -> value of differences
 }
 
-func CompareINI(original, current string) (b []byte, err error) {
+func CompareINI(original, current string, makeAll *bool) (b []byte, err error) {
 
 	// read the INI files and create the compare object
 	ic, err := readFiles(original, current)

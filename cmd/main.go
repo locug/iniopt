@@ -11,6 +11,7 @@ import (
 )
 
 var (
+	makeAll      = flag.Bool("a", true, "should make all, not just differences")
 	originalPath = flag.String("o", "", "location of the original file")
 	currentPath  = flag.String("c", "", "location of the current file")
 	outLocation  = flag.String("out", "", "location to put final sql file ")
@@ -25,7 +26,7 @@ func main() {
 		log.Panicln("both original and current path needed ")
 	}
 
-	b, err := iniopt.CompareINI(*originalPath, *currentPath)
+	b, err := iniopt.CompareINI(*originalPath, *currentPath, makeAll)
 	if err != nil {
 		log.Panic(err)
 	}
