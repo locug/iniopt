@@ -1,6 +1,7 @@
 package iniopt
 
 import (
+	"flag"
 	"fmt"
 	"log"
 	"path/filepath"
@@ -8,6 +9,10 @@ import (
 
 	"github.com/go-ini/ini"
 	"golang.org/x/text/encoding/charmap"
+)
+
+var (
+	makeAll = flag.Bool("a", true, "should make all, not just differences")
 )
 
 type INIComp struct {
@@ -49,7 +54,10 @@ func CompareINI(original, current string) (b []byte, err error) {
 			// section/key/value matches between old and new, do nothing
 			if key.String() == oKey.String() {
 				log.Printf("values match for key %s in section %s\n", key.Name(), section.Name())
-				continue
+				// if makeall is false then continue, otherwise add the key
+				if !*makeAll {
+					continue
+				}
 			}
 
 			ic.addDifference(section.Name(), key.Name(), key.String())
